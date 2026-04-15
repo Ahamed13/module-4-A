@@ -18,7 +18,7 @@ stages:
               packageType: 'sdk'
               version: '8.x'
 
-          - script: echo "dotnet publish src/ContosoApp.Api/ContosoApp.Api.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)""
+          - script: echo "dotnet publish src/ContosoApp.Api/ContosoApp.Api.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)"
             displayName: 'Publish API'
 
   - stage: Deploy
