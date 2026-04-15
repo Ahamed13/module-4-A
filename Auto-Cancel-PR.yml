@@ -1,0 +1,15 @@
+trigger: none
+pr:
+  autoCancel: true
+  branches:
+    include:
+      - main
+      - develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
