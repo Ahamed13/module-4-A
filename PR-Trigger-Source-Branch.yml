@@ -13,7 +13,7 @@ variables:
 
 stages:
   - stage: validate
-    condition: startsWith(variables['System.PullRequest.SourceBranch'], 'refs/head/experimental/*')
+    condition: startsWith(variables['System.PullRequest.SourceBranch'], 'experimental/')
     jobs:
       - job: BuildAndTest
         steps:
