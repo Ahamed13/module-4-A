@@ -1,9 +1,9 @@
 trigger:
   branches:
     include:
-      - main
-    exclude:
       - experimental/*
+    exclude:
+      - main
       - sandbox/*
 
 pool:
