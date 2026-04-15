@@ -1,0 +1,21 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    exclude:
+      - src/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
