@@ -1,0 +1,30 @@
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+      - feature/*
+  paths:
+    include:
+      - '**/*.csproj'
+      - 'src/*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - script: echo "dotnet restore ContosoApp.sln --verbosity detailed"
+    displayName: 'Restore and validate dependencies'
+
+  - script: |
+      echo "dotnet list ContosoApp.sln package --vulnerable --include-transitive"
+    displayName: 'Check for vulnerable packages'
+
+  - script: |
+      echo "dotnet list ContosoApp.sln package --outdated"
+    displayName: 'List outdated packages'
