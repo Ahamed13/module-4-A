@@ -5,6 +5,7 @@ trigger:
     exclude:
       - main
       - sandbox/*
+      
 pool:
   vmImage: 'ubuntu-latest'
 
