@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+      - refs/tags/v*
+  tags:
+    include:
+      - v*
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - script: |
+      TAG_NAME=$(Build.SourceBranchName)
+      echo "Building for tag: $TAG_NAME"
+    displayName: 'Print tag name'
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
+
+  - script: echo "dotnet build ContosoApp.sln --configuration $(buildConfiguration) --no-restore"
+    displayName: 'Build'
+
+  - script: echo "dotnet test ContosoApp.sln --configuration $(buildConfiguration) --no-build"
+    displayName: 'Test'

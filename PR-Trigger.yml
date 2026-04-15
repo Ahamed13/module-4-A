@@ -1,0 +1,28 @@
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+      - develop
+    
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
+
+  - script: echo "dotnet build ContosoApp.sln --configuration $(buildConfiguration) --no-restore"
+    displayName: 'Build'
+
+  - script: echo "dotnet test ContosoApp.sln --configuration $(buildConfiguration) --no-build --logger trx"
+    displayName: 'Run Test'
