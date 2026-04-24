@@ -1,0 +1,55 @@
+trigger: none
+pr: none
+
+schedules:
+  - cron: '0 0 * * 1-5'
+    displayName: 'Nightly build'
+    branches:
+      include:
+        - experimental/testing
+  
+  - cron: '0 3 * * 1-5'
+    displayName: 'Nightly build main branch and deploy to stage'
+    branches:
+      include:
+        - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+  - stage: Build
+    displayName: 'Build and Test'
+    jobs:
+        - job: BuildAndTest
+          steps:
+            - task: UseDotNet@2
+              inputs:
+                packageType: 'sdk'
+                version: '8.x'
+
+            - script: echo "dotnet restore ContosoApp.sln"
+              displayName: 'Restore'
+
+            - script: echo "dotnet build ContosoApp.sln --configuration $(buildConfiguration) --no-restore"
+              displayName: 'Build'
+
+            - script: echo "dotnet test ContosoApp.sln --configuration $(buildConfiguration) --no-build --logger trx"
+              displayName: 'Test' 
+
+  - stage: DeployStage
+    displayName: 'Deploy to staging'
+    dependsOn: Build
+    condition: and(succeeded() eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs: 
+      - deployment: DeployStaging
+        environment: 'staging'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: echo "Deploying to staging environment..."
+                  displayName: 'Deploy to staging'        
