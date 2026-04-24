@@ -1,0 +1,31 @@
+trigger: none
+pr: none
+
+schedules:
+  - cron: '0 2 * * 1-5'
+    displayName: 'Nightly weeday build (2AM UTC)'
+    branches:
+      include:
+        - main
+    always: false
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
+
+  - script: echo "dotnet build ContosoApp.sln --configuration $(buildConfiguration) --no-restore"
+    displayName: 'Build'
+
+  - script: echo "dotnet test ContosoApp.sln --configuration $(buildConfiguration) --no-build --logger trx"
+    displayName: 'Run all tests'
+
+  - script: echo "dotnet test tests/ContosoApp.Integration.Tests/ContosoApp.Integration.Tests.csproj --configuration $(buildConfiguration) --logger trx"
+    displayName: 'Run integration tests'
