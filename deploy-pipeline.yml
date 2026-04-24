@@ -8,6 +8,7 @@ resources:
       trigger: 
         tags:
           - release-*
+          
 
 pool: 
   vmImage: 'ubuntu-latest'
