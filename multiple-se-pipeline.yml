@@ -43,7 +43,7 @@ stages:
   - stage: DeployStage
     displayName: 'Deploy to staging'
     dependsOn: Build
-    condition: and(succeeded() eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     jobs: 
       - deployment: DeployStaging
         environment: 'staging'
