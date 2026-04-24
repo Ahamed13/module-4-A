@@ -9,8 +9,8 @@ resources:
         branches: 
           include:
             - main
-        stages: 
-          - IntegrationTest
+        tags:
+          - release-*
 
 pool: 
   vmImage: 'ubuntu-latest'
