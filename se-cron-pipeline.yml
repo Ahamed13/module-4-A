@@ -7,7 +7,7 @@ schedules:
     branches:
       include: 
         - main
-    always: flase
+    always: false
 
   - cron: '0 0 * * 0'
     displayName: 'Every sunday at midnight'
@@ -21,7 +21,7 @@ schedules:
     branches:
       include: 
         - main
-    always: flase
+    always: false
 
   - cron: '0 5 1 * *'
     displayName: 'monthly 1st at 5AM UTC'
