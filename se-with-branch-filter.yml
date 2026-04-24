@@ -1,0 +1,38 @@
+trigger: none
+pr: none
+
+schedules:  
+  - cron: '0 1 * * 1-5'
+    displayName: 'Nightly regression (1 AM UTC)'
+    branches:
+      include:
+        - main
+        - release/*
+      exclude:
+        - release/legacy-*
+    always: true
+
+pool: 
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - script: |
+      echo "Running regression tests for branch: $(Build.SourceBranch)"
+    displayName: 'Print branch info'
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
+
+  - script: echo "dotnet build ContosoApp.sln --configuration $(buildConfiguration) --no-restore"
+    displayName: 'Build'
+
+  - script: echo "dotnet test ContosoApp.sln --configuration $(buildConfiguration) --no-build --logger trx"
+    displayName: 'Run regression tests'
