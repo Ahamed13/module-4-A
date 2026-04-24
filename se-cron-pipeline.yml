@@ -1,0 +1,58 @@
+trigger: none
+pr: none
+
+schedules:
+  - cron: '30 3 * * *'
+    displayName: 'Daily 3:30 AM UTC'
+    branches:
+      include: 
+        - main
+    always: flase
+
+  - cron: '0 0 * * 0'
+    displayName: 'Every sunday at midnight'
+    branches:
+      include: 
+        - main
+    always: true
+
+  - cron: '0 0,6,12,18 * * 1-5'
+    displayName: 'Every 6 hours in weekdays'
+    branches:
+      include: 
+        - main
+    always: flase
+
+  - cron: '0 5 1 * *'
+    displayName: 'monthly 1st at 5AM UTC'
+    branches:
+      include: 
+        - main
+    always: true
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - script: |
+      echo "Schedule: $(Build.CronSchedule.DisplayName)"
+      echo "Trigger Time: $(date -u)"
+    displayName: 'Print schedule info'
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
+
+  - script: echo "dotnet build ContosoApp.sln --configuration $(buildConfiguration) --no-restore"
+    displayName: 'Build'
+
+  - script: echo "dotnet test ContosoApp.sln --configuration $(buildConfiguration) --no-build"
+    displayName: 'Test'
+  
