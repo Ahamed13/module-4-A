@@ -6,9 +6,6 @@ resources:
     - pipeline: buildpipeline
       source: 'build-pipeline'
       trigger: 
-        branches: 
-          include:
-            - main
         tags:
           - release-*
 
@@ -26,5 +23,5 @@ stages:
             deploy:
               steps:
                 - script: |
-                    echo "Deploying artifacts from build $(resources.pipeline.buildPipeline.runID)"
+                    echo "Deploying artifacts from build $(resources.pipeline.buildpipeline.runID)"
                   displayName: 'Deploy API'    
