@@ -5,10 +5,8 @@ resources:
   pipelines:
     - pipeline: buildpipeline
       source: 'build-pipeline'
-      trigger: 
-        tags:
-          - release-*
-          
+      trigger: true
+
 
 pool: 
   vmImage: 'ubuntu-latest'
