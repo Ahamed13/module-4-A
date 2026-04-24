@@ -1,0 +1,25 @@
+trigger: none
+pr: none
+
+resources:
+  pipelines:
+    - pipeline: buildpipeline
+      source: 'build-pipeline'
+      trigger: true
+
+pool: 
+  vmImage: 'unbuntu-latest'
+
+stages:
+  - stage: Deploy
+    displayName: 'Deploy to Staging'
+    jobs:
+      - deployment: DeployStaging
+        environment: 'staging'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: |
+                    echo "Deploying artifacts from build $(resources.pipeline.buildPipeline.runID)"
+                  displayName: 'Deploy API'    
