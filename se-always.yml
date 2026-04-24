@@ -1,0 +1,31 @@
+trigger: none
+pr: none
+
+schedules:
+  - cron: '0 6 * * *'
+    displayName: 'Daily security scan (6AM UTC)'
+    branches:
+      include:
+        - main
+    always: true
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'
+
+  - script: echo "dotnet restore ContosoApp.sln"
+    displayName: 'Restore'
+
+  - script: echo "dotnet list ContosoApp.sln package --vulnerable --include-transitive > $(Build.ArtifactStagingDirectory)/vulnerability-report.txt"
+    displayName: 'Scan for vulnerable packages'
+
+  - script: echo "dotnet list ContosoApp.sln package --deprecated > $(Build.ArtifactStagingDirectory)/deprecated-report.txt"
+    displayName: 'Check for deprecated packages'
+
+  - script: echo "dotnet build ContosoApp.sln --configuration Release --no-restore"
+    displayName: 'Build for analysis'
