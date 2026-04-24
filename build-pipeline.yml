@@ -19,3 +19,13 @@ stages:
 
           - script: echo "dotnet publish src/ContosoApp.Api/ContosoApp.Api.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)"
             displayName: 'Publish'  
+
+  - stage: TagRelease
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - job: TagJob
+        steps:
+          - script: |
+              echo "##vso[build.addbuildtag]release-$(Build.BuildNumber)"
+            displayName: 'Tag build as release'
