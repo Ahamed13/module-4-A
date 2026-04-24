@@ -8,7 +8,7 @@ resources:
       trigger: true
 
 pool: 
-  vmImage: 'unbuntu-latest'
+  vmImage: 'ubuntu-latest'
 
 stages:
   - stage: Deploy
