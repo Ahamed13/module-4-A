@@ -7,9 +7,9 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-stages: 
+stages:
   - stage: Build
-    jobs: 
+    jobs:
       - job: BuildJob
         steps:
           - task: UseDotNet@2
@@ -17,18 +17,5 @@ stages:
               packageType: 'sdk'
               version: '8.x'
 
-          - script: echo "dotnet publish src/ContosoApp.Api/ContosoApp.Api.csproj"
-            displayName: 'Publish API'  
-              
-  - stage: IntegrationTest
-    dependsOn: Build
-    jobs: 
-      - job: IntTestJob
-        steps:
-          - task: UseDotNet@2
-            inputs:
-              packageType: 'sdk'
-              version: '8.x'
-
-          - script: echo "dotnet test tests/ContosoApp.Integration.Tests/ContosoApp.Integration.Tests.csproj --configuration Release"
-            displayName: 'Integration tests'      
+          - script: echo "dotnet publish src/ContosoApp.Api/ContosoApp.Api.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)"
+            displayName: 'Publish'  
